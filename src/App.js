@@ -8,6 +8,7 @@ export default function App() {
   
     const [dice, setDice] = useState(allNewDice())
     const [tenzies, setTenzies] = useState(false)
+    const [countRolls, setCountRolls] = useState(0)
     
     useEffect(() => {
         const allHeld = dice.every(die => die.isHeld)
@@ -36,12 +37,14 @@ export default function App() {
     
     function rollDice() {
         if(!tenzies) {
+            setCountRolls(prevCountRolls => prevCountRolls + 1)
             setDice(oldDice => oldDice.map(die => {
                 return die.isHeld ? 
                     die :
                     generateNewDie()
             }))
         } else {
+            setCountRolls(0)
             setTenzies(false)
             setDice(allNewDice())
         }
@@ -79,6 +82,14 @@ export default function App() {
             >
                 {tenzies ? "New Game" : "Roll"}
             </button>
+            <div className="stats">
+                <div className="stats-count">
+                    <p>Time: {}</p>
+                </div>
+                <div className="stats-count">
+                    <p>Rolls: {countRolls}</p>
+                </div>
+            </div>
         </main>
     )
 }

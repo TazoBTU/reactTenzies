@@ -2,13 +2,15 @@ import Die from "./Die"
 import {nanoid} from "nanoid"
 import Confetti from 'react-confetti'
 import {useState, useEffect} from "react"
-
+import Stopwatch from "./Stopwatch"
 
 export default function App() {
   
     const [dice, setDice] = useState(allNewDice())
     const [tenzies, setTenzies] = useState(false)
     const [countRolls, setCountRolls] = useState(0)
+    const [time, setTime] = useState(0);
+    const [running, setRunning] = useState(false);
     
     useEffect(() => {
         const allHeld = dice.every(die => die.isHeld)
@@ -16,6 +18,7 @@ export default function App() {
         const allSameValue = dice.every(die => die.value === firstValue)
         if (allHeld && allSameValue) {
             setTenzies(true)
+            setRunning(false)
         }
     }, [dice])
 
@@ -37,6 +40,7 @@ export default function App() {
     
     function rollDice() {
         if(!tenzies) {
+            setRunning(true)
             setCountRolls(prevCountRolls => prevCountRolls + 1)
             setDice(oldDice => oldDice.map(die => {
                 return die.isHeld ? 
@@ -44,6 +48,7 @@ export default function App() {
                     generateNewDie()
             }))
         } else {
+            setTime(0)
             setCountRolls(0)
             setTenzies(false)
             setDice(allNewDice())
@@ -66,7 +71,20 @@ export default function App() {
             holdDice={() => holdDice(die.id)}
         />
     ))
-    
+
+    // This Hook checks if the timer is running and if so updates the time.
+    useEffect(() => {
+        let interval;
+        if (running) {
+          interval = setInterval(() => {
+            setTime((prevTime) => prevTime + 10);
+          }, 10);
+        } else if (!running) {
+          clearInterval(interval);
+        }
+        return () => clearInterval(interval);
+      }, [running]);
+
     return (
         <main>
             {tenzies && <Confetti />}
@@ -82,11 +100,9 @@ export default function App() {
             >
                 {tenzies ? "New Game" : "Roll"}
             </button>
-            <div className="stats">
-                <div className="stats-count">
-                    <p>Time: {}</p>
-                </div>
-                <div className="stats-count">
+            <div className="stats"> 
+                <Stopwatch time={time} />
+                <div className="rolls-count">
                     <p>Rolls: {countRolls}</p>
                 </div>
             </div>

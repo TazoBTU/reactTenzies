@@ -71,7 +71,7 @@ main {
   width: 150px;
   border: none;
   border-radius: 6px;
-  background-color: #5035FF;
+  background-color: #32527b;
   color: white;
   font-size: 1.2rem;
   font-family: 'Karla', sans-serif;
@@ -92,13 +92,13 @@ main {
   gap: 230px;
 }
 
-.stats-count {
-  height: 30px;
-  width: 100px;
+.stats div {
+  height: 39px;
+  width: 169px;
   box-shadow: 1px 2px 1px rgba(0, 0, 0, 0.15);
   border-radius: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: white;
+  background-color: whitesmoke;
 }

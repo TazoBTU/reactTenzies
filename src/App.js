@@ -11,6 +11,7 @@ export default function App() {
     const [countRolls, setCountRolls] = useState(0)
     const [time, setTime] = useState(0);
     const [running, setRunning] = useState(false);
+    const [shake, setShake] = useState(false);
     
     useEffect(() => {
         const allHeld = dice.every(die => die.isHeld)
@@ -37,15 +38,25 @@ export default function App() {
         }
         return newDice
     }
+
+    function shakeDice () {
+        // Dice begin to shake
+        setShake(true)
+        // Dice stop to shake after 0.269 seconds
+        setTimeout(() => setShake(false), 169)
+    }
     
     function rollDice() {
+        shakeDice()
         if(!tenzies) {
             setRunning(true)
             setCountRolls(prevCountRolls => prevCountRolls + 1)
             setDice(oldDice => oldDice.map(die => {
-                return die.isHeld ? 
+                return (
+                    die.isHeld ? 
                     die :
                     generateNewDie()
+                )
             }))
         } else {
             setTime(0)
@@ -69,6 +80,7 @@ export default function App() {
             value={die.value} 
             isHeld={die.isHeld} 
             holdDice={() => holdDice(die.id)}
+            shake={shake}
         />
     ))
 

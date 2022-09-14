@@ -97,6 +97,8 @@ export default function App() {
         return () => clearInterval(interval);
       }, [running]);
 
+    // Save best time and rolls on localStorage
+
     return (
         <main>
             {tenzies && <Confetti />}
